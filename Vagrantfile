@@ -33,6 +33,11 @@ Vagrant.configure("2") do |config|
       sudo sed -i -e 's+PasswordAuthentication no+PasswordAuthentication yes+g' /etc/ssh/sshd_config
       sudo yum install -y git vim net-tools
       sudo yum install -y docker
+      sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      sudo yum -y install jq
+      sudo curl -OL https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.rpm
+      sudo rpm -i dive_0.9.2_linux_amd64.rpm
+      sudo cp /usr/local/bin/dive /usr/bin/
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -42,7 +47,11 @@ Vagrant.configure("2") do |config|
       sudo chmod +x /usr/bin/docker-compose
       sudo systemctl restart sshd
       sudo git clone https://github.com/cyberark/conjur-quickstart.git
-      mv /data/setup.sh /home/vagrant/conjur-quickstart/
+      cp /data/setup.sh /home/vagrant/conjur-quickstart/
+      yes | cp -rf /data/docker-compose.yml /home/vagrant/conjur-quickstart/docker-compose.yml
+      cp -R /data/nginx /home/vagrant/conjur-quickstart/
       pwd
+      cd conjur-quickstart
+      sudo /bin/sh setup.sh
     SHELL
 end
